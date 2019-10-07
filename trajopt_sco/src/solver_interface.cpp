@@ -247,7 +247,7 @@ Model::Ptr createModel(ModelType model_type)
 
   if (solver == ModelType::AUTO_SOLVER)
   {
-    if (solver_env and std::string(solver_env) != "AUTO_SOLVER")
+    if (solver_env && std::string(solver_env) != "AUTO_SOLVER")
     {
       try
       {

@@ -172,7 +172,9 @@ void OSQPModel::createOrUpdateSolver()
   if (osqp_workspace_ != nullptr)
     osqp_cleanup(osqp_workspace_);
   // Setup workspace - this should be called only once
-  osqp_workspace_ = osqp_setup(&osqp_data_, &osqp_settings_);
+  c_int ret = osqp_setup(&osqp_workspace_, &osqp_data_, &osqp_settings_);
+  std::cerr << "osqp_setup c_int ret:" << ret << std::endl;
+  assert(ret == 0);
 }
 
 void OSQPModel::update()

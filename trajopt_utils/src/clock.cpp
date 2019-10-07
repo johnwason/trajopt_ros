@@ -1,14 +1,15 @@
 #include <trajopt_utils/macros.h>
 TRAJOPT_IGNORE_WARNINGS_PUSH
-#include <sys/time.h>
-#include <time.h>
+//#include <sys/time.h>
+//#include <time.h>
+#include<chrono>
 TRAJOPT_IGNORE_WARNINGS_POP
 
 #include <trajopt_utils/clock.hpp>
 
 namespace util
 {
-static long unsigned int startTime = 0;
+static std::chrono::steady_clock::time_point startTime;
 
 /*
  * Starts the clock!  Call this once at the beginning of the program.
@@ -21,9 +22,7 @@ static long unsigned int startTime = 0;
 void StartClock()
 {
   // determine start time
-  struct timeval startTimeStruct;
-  gettimeofday(&startTimeStruct, nullptr);
-  startTime = static_cast<unsigned long>(startTimeStruct.tv_sec * 1e6l + startTimeStruct.tv_usec);
+  startTime = std::chrono::steady_clock::now();
 }
 
 /*
@@ -31,10 +30,7 @@ void StartClock()
  */
 double GetClock()
 {
-  struct timeval startTimeStruct;
-  unsigned long int curTime;
-  gettimeofday(&startTimeStruct, nullptr);
-  curTime = static_cast<unsigned long>(startTimeStruct.tv_sec * 1e6l + startTimeStruct.tv_usec);
-  return (1e-6) * static_cast<double>(curTime - startTime);
+  std::chrono::steady_clock::duration diff = std::chrono::steady_clock::now() - startTime;
+  return (1e-6) * static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(diff).count());
 }
 }  // namespace util

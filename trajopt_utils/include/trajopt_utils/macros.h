@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 
+#ifndef _MSC_VER
 // clang-format off
 #define TRAJOPT_IGNORE_WARNINGS_PUSH                                                                                   \
   _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wall\"")                                           \
@@ -12,6 +13,10 @@
                           _Pragma("GCC diagnostic ignored \"-Wsign-conversion\"")
 
 #define TRAJOPT_IGNORE_WARNINGS_POP _Pragma("GCC diagnostic pop")
+#else
+#define TRAJOPT_IGNORE_WARNINGS_PUSH
+#define TRAJOPT_IGNORE_WARNINGS_POP	
+#endif
 
 // Generic helper definitions for shared library support
 #if defined _WIN32 || defined __CYGWIN__
@@ -35,7 +40,9 @@
 // build)
 // TRAJOPT_LOCAL is used for non-api symbols.
 
+#ifndef _MSC_VER
 #define TRAJOPT_DLL
+#endif
 
 #ifdef TRAJOPT_DLL          // defined if TRAJOPT is compiled as a DLL
 #ifdef TRAJOPT_DLL_EXPORTS  // defined if we are building the TRAJOPT DLL (instead of using it)

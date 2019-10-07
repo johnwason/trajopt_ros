@@ -3,14 +3,16 @@ project(trajopt VERSION 0.1.0 LANGUAGES CXX)
 
 find_package(Eigen3 REQUIRED)
 find_package(Boost COMPONENTS system python thread program_options REQUIRED)
+find_package(jsoncpp REQUIRED)
 find_package(console_bridge REQUIRED)
 find_package(trajopt_sco REQUIRED)
 find_package(trajopt_utils REQUIRED)
 find_package(tesseract REQUIRED)
 find_package(tesseract_visualization REQUIRED)
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(JSONCPP jsoncpp)
+
+#find_package(PkgConfig REQUIRED)
+#pkg_check_modules(JSONCPP jsoncpp)
 
 list(FIND CMAKE_CXX_COMPILE_FEATURES cxx_std_11 CXX_FEATURE_FOUND)
 
@@ -30,7 +32,7 @@ set(TRAJOPT_SOURCE_FILES
     src/file_write_callback.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${TRAJOPT_SOURCE_FILES})
+add_library(${PROJECT_NAME} STATIC ${TRAJOPT_SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC
     trajopt::trajopt_sco
     trajopt::trajopt_utils
@@ -38,12 +40,15 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     tesseract::tesseract_visualization
     console_bridge
     ${Boost_SYSTEM_LIBRARY}
-    ${JSONCPP_LIBRARIES})
+    #$<TARGET_PROPERTY:jsoncpp_lib,INTERFACE_INCLUDE_DIRECTORIES>
+	)
+if(NOT MSVC)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wsuggest-override -Wconversion -Wsign-conversion)
 if(CXX_FEATURE_FOUND EQUAL "-1")
     target_compile_options(${PROJECT_NAME} PUBLIC -std=c++11)
 else()
     target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_11)
+endif()
 endif()
 target_include_directories(${PROJECT_NAME} PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

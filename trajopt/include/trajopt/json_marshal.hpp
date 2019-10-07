@@ -3,7 +3,7 @@
 TRAJOPT_IGNORE_WARNINGS_PUSH
 #include <Eigen/Eigen>
 #include <boost/format.hpp>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #include <sstream>
 #include <string>
 #include <vector>

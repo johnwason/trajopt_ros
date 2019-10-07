@@ -13,13 +13,15 @@ set(UTILS_SOURCE_FILES
     src/logging.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${UTILS_SOURCE_FILES})
+add_library(${PROJECT_NAME} STATIC ${UTILS_SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${Boost_LIBRARIES})
+if(NOT MSVC)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wsuggest-override -Wconversion -Wsign-conversion)
 if(CXX_FEATURE_FOUND EQUAL "-1")
     target_compile_options(${PROJECT_NAME} PUBLIC -std=c++11)
 else()
     target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_11)
+endif()
 endif()
 target_include_directories(${PROJECT_NAME} PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
