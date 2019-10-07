@@ -23,6 +23,11 @@ if(NOT MSVC)
 		target_compile_features(convex_decomposition_hacd_node PRIVATE cxx_std_11)
 	endif()
 endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(convex_decomposition_hacd_node PRIVATE -mno-avx)
+  else()
+    message(WARNING "Non-GNU compiler detected. If using AVX instructions, Eigen alignment issues may result.")
+  endif()
 target_include_directories(convex_decomposition_hacd_node SYSTEM PRIVATE
     ${EIGEN3_INCLUDE_DIRS}
     ${BULLET_INCLUDE_DIRS}
@@ -39,6 +44,11 @@ if(NOT MSVC)
 		target_compile_features(convex_decomposition_vhacd_node PRIVATE cxx_std_11)
 	endif()
 endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(convex_decomposition_vhacd_node PRIVATE -mno-avx)
+  else()
+    message(WARNING "Non-GNU compiler detected. If using AVX instructions, Eigen alignment issues may result.")
+  endif()
 target_include_directories(convex_decomposition_vhacd_node SYSTEM PRIVATE
     ${EIGEN3_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
