@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(vhacd VERSION 0.1.0 LANGUAGES CXX)
 
+if(WIN32)
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Windows builds must be static" FORCE)
+else()
+  set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
+endif()
+
 find_package(Bullet REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(OpenMP REQUIRED)
@@ -28,7 +34,7 @@ if(NOT TARGET OpenMP::OpenMP_CXX)
 
 endif()
 
-add_library(vhacd STATIC ${PROJECT_CPP_FILES} ${PROJECT_C_FILES} ${PROJECT_INC_FILES} ${PROJECT_INL_FILES} ${PROJECT_CL_FILES})
+add_library(vhacd ${PROJECT_CPP_FILES} ${PROJECT_C_FILES} ${PROJECT_INC_FILES} ${PROJECT_INL_FILES} ${PROJECT_CL_FILES})
 if(CXX_FEATURE_FOUND EQUAL "-1")
     target_compile_options(vhacd PRIVATE -std=c++11)
 else()

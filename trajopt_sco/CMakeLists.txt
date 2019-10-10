@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(trajopt_sco VERSION 0.1.0 LANGUAGES CXX)
 
+if(WIN32)
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Windows builds must be static" FORCE)
+else()
+  set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 find_package(GUROBI QUIET)
 find_package(osqp QUIET)
@@ -10,9 +16,6 @@ find_package(trajopt_utils REQUIRED)
 find_package(jsoncpp REQUIRED)
 
 list(FIND CMAKE_CXX_COMPILE_FEATURES cxx_std_11 CXX_FEATURE_FOUND)
-
-#find_package(PkgConfig REQUIRED)
-#pkg_check_modules(JSONCPP jsoncpp)
 
 set(SCO_SOURCE_FILES
     src/solver_interface.cpp
@@ -77,7 +80,7 @@ if (qpOASES_FOUND)
   list(APPEND SCO_SOURCE_FILES src/qpoases_interface.cpp)
 endif()
 
-add_library(${PROJECT_NAME} STATIC ${SCO_SOURCE_FILES})
+add_library(${PROJECT_NAME} ${SCO_SOURCE_FILES})
 
 if (GUROBI_FOUND)
   target_link_libraries(${PROJECT_NAME} PRIVATE ${GUROBI_LIBRARIES})

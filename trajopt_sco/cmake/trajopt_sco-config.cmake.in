@@ -10,9 +10,8 @@ include(CMakeFindDependencyMacro)
 find_dependency(Eigen3)
 find_dependency(trajopt_utils)
 
-find_dependency(PkgConfig)
-pkg_check_modules(JSONCPP jsoncpp)
+find_dependency(jsoncpp)
 
-find_dependency(osqp)
+find_package(qpOASES)
 
 include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@-targets.cmake")

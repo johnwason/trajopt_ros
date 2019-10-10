@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(trajopt VERSION 0.1.0 LANGUAGES CXX)
 
+if(WIN32)
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Windows builds must be static" FORCE)
+else()
+  set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
+endif()
+
 find_package(Eigen3 REQUIRED)
 find_package(Boost COMPONENTS system python thread program_options REQUIRED)
 find_package(jsoncpp REQUIRED)
@@ -9,10 +15,6 @@ find_package(trajopt_sco REQUIRED)
 find_package(trajopt_utils REQUIRED)
 find_package(tesseract REQUIRED)
 find_package(tesseract_visualization REQUIRED)
-
-
-#find_package(PkgConfig REQUIRED)
-#pkg_check_modules(JSONCPP jsoncpp)
 
 list(FIND CMAKE_CXX_COMPILE_FEATURES cxx_std_11 CXX_FEATURE_FOUND)
 
@@ -32,7 +34,7 @@ set(TRAJOPT_SOURCE_FILES
     src/file_write_callback.cpp
 )
 
-add_library(${PROJECT_NAME} STATIC ${TRAJOPT_SOURCE_FILES})
+add_library(${PROJECT_NAME} ${TRAJOPT_SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC
     trajopt::trajopt_sco
     trajopt::trajopt_utils
@@ -40,7 +42,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     tesseract::tesseract_visualization
     console_bridge
     ${Boost_SYSTEM_LIBRARY}
-    #$<TARGET_PROPERTY:jsoncpp_lib,INTERFACE_INCLUDE_DIRECTORIES>
+    jsoncpp_lib
 	)
 if(NOT MSVC)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wsuggest-override -Wconversion -Wsign-conversion)
@@ -54,6 +56,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<INSTALL_INTERFACE:include>")
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
+    $<TARGET_PROPERTY:jsoncpp_lib,INTERFACE_INCLUDE_DIRECTORIES>
     ${JSONCPP_INCLUDE_DIRS}
     ${EIGEN3_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS})

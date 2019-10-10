@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(trajopt_utils VERSION 0.1.0 LANGUAGES CXX)
 
+if(WIN32)
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Windows builds must be static" FORCE)
+else()
+  set(BUILD_SHARED_LIBS ON CACHE BOOL "Build shared libraries" FORCE)
+endif()
+
 find_package(Eigen3 REQUIRED)
 find_package(Boost COMPONENTS system python thread program_options REQUIRED)
 
@@ -13,7 +19,7 @@ set(UTILS_SOURCE_FILES
     src/logging.cpp
 )
 
-add_library(${PROJECT_NAME} STATIC ${UTILS_SOURCE_FILES})
+add_library(${PROJECT_NAME} ${UTILS_SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${Boost_LIBRARIES})
 if(NOT MSVC)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wsuggest-override -Wconversion -Wsign-conversion)
