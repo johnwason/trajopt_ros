@@ -168,13 +168,13 @@ inline Eigen::Vector3d calcRotationalError(const Eigen::Ref<const Eigen::Matrix3
 
   // Make sure that the angle is on [-pi, pi]
   double angle = r12.angle();
-  angle = copysign(fmod(fabs(angle), 2.0 * M_PI), angle);
-  if (angle < -M_PI)
-    angle += 2.0 * M_PI;
-  else if (angle > M_PI)
-    angle -= 2.0 * M_PI;
+  angle = copysign(fmod(fabs(angle), 2.0 * EIGEN_PI), angle);
+  if (angle < -EIGEN_PI)
+    angle += 2.0 * EIGEN_PI;
+  else if (angle > EIGEN_PI)
+    angle -= 2.0 * EIGEN_PI;
 
-  assert(std::abs(angle) <= M_PI);
+  assert(std::abs(angle) <= EIGEN_PI);
 
   return r12.axis() * angle;
 }
