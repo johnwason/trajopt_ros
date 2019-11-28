@@ -20,10 +20,8 @@ public:
   virtual double operator()(const Eigen::VectorXd& x) const = 0;
   double call(const Eigen::VectorXd& x) const { return operator()(x); }
   virtual ~ScalarOfVector() {}
-  using func = std::function<double(Eigen::VectorXd)>;
+  using func = std::function<double(const Eigen::VectorXd&)>;
   static ScalarOfVector::Ptr construct(const func&);
-  //  typedef VectorXd (*c_func)(const VectorXd&);
-  //  static ScalarOfVectorPtr construct(const c_func&);
 };
 class VectorOfVector
 {
@@ -33,10 +31,8 @@ public:
   virtual Eigen::VectorXd operator()(const Eigen::VectorXd& x) const = 0;
   Eigen::VectorXd call(const Eigen::VectorXd& x) const { return operator()(x); }
   virtual ~VectorOfVector() {}
-  using func = std::function<Eigen::VectorXd(Eigen::VectorXd)>;
+  using func = std::function<Eigen::VectorXd(const Eigen::VectorXd&)>;
   static VectorOfVector::Ptr construct(const func&);
-  //  typedef VectorXd (*c_func)(const VectorXd&);
-  //  static VectorOfVectorPtr construct(const c_func&);
 };
 class MatrixOfVector
 {
@@ -46,10 +42,8 @@ public:
   virtual Eigen::MatrixXd operator()(const Eigen::VectorXd& x) const = 0;
   Eigen::MatrixXd call(const Eigen::VectorXd& x) const { return operator()(x); }
   virtual ~MatrixOfVector() {}
-  using func = std::function<Eigen::MatrixXd(Eigen::VectorXd)>;
+  using func = std::function<Eigen::MatrixXd(const Eigen::VectorXd&)>;
   static MatrixOfVector::Ptr construct(const func&);
-  //  typedef VectorMatrixXd (*c_func)(const VectorXd&);
-  //  static MatrixOfVectorPtr construct(const c_func&);
 };
 
 Eigen::VectorXd calcForwardNumGrad(const ScalarOfVector& f, const Eigen::VectorXd& x, double epsilon);
