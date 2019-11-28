@@ -100,7 +100,7 @@ if (qpOASES_FOUND)
   target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${qpOASES_INCLUDE_DIRS})
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC trajopt::trajopt_utils ${CMAKE_DL_LIBS} ${JSONCPP_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PUBLIC trajopt::trajopt_utils ${CMAKE_DL_LIBS} jsoncpp_lib)
 if(NOT MSVC)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wsuggest-override -Wconversion -Wsign-conversion)
 if(CXX_FEATURE_FOUND EQUAL "-1")
